@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuliu.dao.OrderDao">
+
+    <resultMap id="OrderAndCustomerAndDriverAndTran_map" type="Order">
+        <id property="order_id" column="order_id"/>
+        <result property="order_no" column="order_no"/>
+        <result property="send_date" column="send_date"/>
+        <result property="arrive_date" column="arrive_date"/>
+        <result property="send_address" column="send_address"/>
+        <result property="arrive_address" column="arrive_address"/>
+        <result property="order_state" column="order_state"/>
+        <result property="order_create_date" column="order_create_date"/>
+        <result property="order_money" column="order_money"/>
+        <result property="order_arrive_username" column="order_arrive_username"/>
+        <result property="order_arrive_usertel" column="order_arrive_usertel"/>
+        <association property="order_customer" column="order_customer" javaType="Customer">
+            <id property="customer_id" column="customer_id"/>
+            <result property="customer_name" column="customer_name"/>
+            <result property="customer_tel" column="customer_tel"/>
+            <result property="customer_username" column="customer_username"/>
+            <result property="customer_password" column="customer_password"/>
+        </association>
+        <association property="order_driver" column="order_driver" javaType="Driver">
+            <id property="driver_id" column="driver_id"/>
+            <result property="driver_name" column="driver_name"/>
+            <result property="driver_username" column="driver_username"/>
+            <result property="driver_password" column="driver_password"/>
+            <result property="driver_state" column="driver_state"/>
+        </association>
+        <association property="order_tran" column="order_tran" javaType="Tran">
+            <id property="tran_id" column="tran_id"/>
+            <result property="tran_name" column="tran_name"/>
+            <result property="tran_money" column="tran_money"/>
+            <result property="tran_state" column="tran_state"/>
+            <result property="" column=""/>
+        </association>
+    </resultMap>
+
+    <select id="adminFindAllOrder" resultMap="OrderAndCustomerAndDriverAndTran_map">
+        select * from t_order o
+    </select>
+
+<!--  用户撤销订单  -->
+    <delete id="delOrderById">
+        delete from t_order where order_id=#{order_id}
+    </delete>
+
+    <!-- 用户下单，用户添加不了发货时间，送货时间，司机id和车id，运费 -->
+    <insert id="customerAddOrder" parameterType="Order">
+        insert into t_order
+        (order_no,
+         send_address,
+         arrive_address,
+         order_state,
+         order_create_date,
+         order_arrive_username,
+         order_arrive_usertel,
+         order_customer)
+        values
+        (#{order_no},
+         #{send_address},
+         #{arrive_address},
+         #{order_state},
+         #{order_create_date},
+         #{order_arrive_username},
+         #{order_arrive_usertel},
+         #{order_customer.customer_id})
+    </insert>
+
+    <select id="adminFindOrderFlagIs0" resultMap="OrderAndCustomerAndDriverAndTran_map">
+        select *
+        from t_order o,t_customer c
+        where 1=1
+        and o.order_customer=c.customer_id
+        and o.order_state=0
+    </select>
+
+    <select id="adminFindOrderContent" resultMap="OrderAndCustomerAndDriverAndTran_map">
+        select *
+        from t_order o,t_customer c
+        where 1=1
+        and o.order_customer=c.customer_id
+        and o.order_id=#{order_id }
+    </select>
+
+    <select id="findDriverFlagIs0" resultType="Driver">
+        select *
+        from t_driver
+        where driver_state=0
+    </select>
+
+    <select id="findTranFlagIs1" resultType="Tran">
+        select *
+        from t_tran
+        where tran_state=1
+    </select>
+
+    <update id="driverFlagChangeIs1">
+        update t_driver
+        set driver_state=1
+        where driver_id=#{driver_id}
+    </update>
+
+    <update id="tranFlagChangeIs0">
+        update t_tran
+        set tran_state=0
+        where tran_id=#{tran_id}
+    </update>
+
+    <update id="adminUpdateOrder" parameterType="Order">
+        update t_order
+        set send_date=#{send_date},
+            arrive_date=#{arrive_date},
+            order_money=#{order_money},
+            order_driver=#{order_driver.driver_id},
+            order_tran=#{order_tran.tran_id}
+        where order_id=#{order_id}
+    </update>
+
+    <update id="orderFlagChangeIs1">
+        update t_order
+        set order_state=1
+        where order_id=#{order_id}
+    </update>
+
+    <update id="customerUpdateOrder" parameterType="Order">
+        update t_order
+        set order_no=#{order_no},
+            send_address=#{send_address},
+            arrive_address=#{arrive_address},
+            order_create_date=#{order_create_date},
+            order_arrive_username=#{order_arrive_username},
+            order_arrive_usertel=#{order_arrive_usertel}
+        where order_id=#{order_id}
+    </update>
+
+</mapper>

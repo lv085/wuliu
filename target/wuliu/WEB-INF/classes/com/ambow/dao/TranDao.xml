@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambow.dao.TranDao">
+    <select id="checkTranName" resultType="tran">
+        select * from t_tran where tran_name=#{tran_name}
+    </select>
+    <select id="findTranList" parameterType="String" resultType="tran">
+        select * from t_tran where 1=1
+        <if test="tran_name!=''">
+            and tran_name like concat('%',#{tran_name},'%')
+        </if>
+    </select>
+
+    <insert id="saveTran" parameterType="tran">
+        insert into t_tran
+        (tran_name,tran_money,tran_state)
+        value
+        (#{tran_name},#{tran_money},#{tran_state})
+    </insert>
+
+    <select id="findTranById" resultType="tran">
+        select * from t_tran where tran_id=#{tran_id}
+    </select>
+
+    <update id="updateTran" parameterType="tran">
+        update  t_tran
+        set
+        tran_name=#{tran_name},tran_money=#{tran_money}
+        where tran_id=#{tran_id}
+    </update>
+
+    <delete id="deleteTran" parameterType="int">
+        delete from t_tran where tran_id=#{tran_id}
+    </delete>
+</mapper>

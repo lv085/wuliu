@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuliu.dao.CustomerDao">
+<!--  判重  -->
+    <select id="checkCustomer" resultType="customer">
+        select * from t_customer where customer_username=#{customer_username}
+    </select>
+    <!-- 登录-->
+    <select id="checkLogin" resultType="customer">
+        SELECT
+        customer_id,
+        customer_name,
+        customer_tel,
+        customer_username,
+        customer_password
+        FROM
+        t_customer
+        WHERE
+        customer_username = #{customer_username}
+        AND customer_password = #{customer_password}
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="findCustomerList" parameterType="String" resultType="customer">
+        SELECT
+        customer_id,
+        customer_name,
+        customer_tel,
+        customer_username,
+        customer_password
+        FROM
+        t_customer
+        WHERE 1 = 1
+        <if test="customer_name != ''">
+            and customer_name like concat('%',#{customer_name},'%')
+        </if>
+        order by customer_id desc
+    </select>
+
+    <!--保存用户-->
+    <insert id="saveCustomer" parameterType="customer">
+        INSERT INTO t_customer (
+        customer_name,
+        customer_tel,
+        customer_username,
+        customer_password
+        )
+        VALUE
+        (#{customer_name}, #{customer_tel}, #{customer_username}, #{customer_password})
+    </insert>
+
+    <!--修改用户前回显查询到的数据-->
+    <select id="findCustomerById" resultType="customer" parameterType="int">
+        SELECT
+        customer_id,
+        customer_name,
+        customer_tel,
+        customer_username,
+        customer_password
+        FROM
+        t_customer
+        WHERE
+        customer_id = #{customer_id}
+    </select>
+
+    <!--修改客户数据-->
+    <update id="updateCustomer" parameterType="customer">
+        UPDATE t_customer
+        SET customer_name = #{customer_name},
+        customer_tel = #{customer_tel},
+        customer_username = #{customer_username},
+        customer_password = #{customer_password}
+        WHERE
+        customer_id = #{customer_id}
+    </update>
+
+    <!--用户自己订单查询map-->
+    <resultMap id="findCustomerOwnOrderMap" type="Order">
+        <id property="order_id" column="order_id"/>
+        <result property="order_no" column="order_no"/>
+        <result property="send_date" column="send_date"/>
+        <result property="arrive_date" column="arrive_date"/>
+        <result property="send_address" column="send_address"/>
+        <result property="arrive_address" column="arrive_address"/>
+        <result property="order_state" column="order_state"/>
+        <result property="order_create_date" column="order_create_date"/>
+        <result property="order_money" column="order_money"/>
+        <result property="order_arrive_username" column="order_arrive_username"/>
+        <result property="order_arrive_usertel" column="order_arrive_usertel"/>
+        <association property="order_customer" column="order_customer" javaType="Customer">
+            <id property="customer_id" column="customer_id"/>
+            <result property="customer_name" column="customer_name"/>
+            <result property="customer_tel" column="customer_tel"/>
+            <result property="customer_username" column="customer_username"/>
+            <result property="customer_password" column="customer_password"/>
+        </association>
+        <association property="order_driver" column="order_driver" javaType="Driver">
+            <id property="driver_id" column="driver_id"/>
+            <result property="driver_name" column="driver_name"/>
+            <result property="driver_username" column="driver_username"/>
+            <result property="driver_password" column="driver_password"/>
+            <result property="driver_state" column="driver_state"/>
+        </association>
+        <association property="order_tran" column="order_tran" javaType="Tran">
+            <id property="tran_id" column="tran_id"/>
+            <result property="tran_name" column="tran_name"/>
+            <result property="tran_money" column="tran_money"/>
+            <result property="tran_state" column="tran_state"/>
+        </association>
+    </resultMap>
+    <!--客户查询自己的所有订单信息-->
+    <select id="findCustomerOwnOrder" resultMap="findCustomerOwnOrderMap" parameterType="int">
+        SELECT
+        *
+        FROM
+        t_order AS o
+        LEFT JOIN t_customer AS c ON o.order_customer = c.customer_id
+        LEFT JOIN t_driver AS d ON o.order_driver = d.driver_id
+        LEFT JOIN t_tran AS t ON o.order_tran = t.tran_id
+        WHERE c.customer_id = #{customer_id}
+    </select>
+
+</mapper>
