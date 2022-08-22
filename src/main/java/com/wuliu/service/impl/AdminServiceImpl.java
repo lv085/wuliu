@@ -13,15 +13,17 @@ import java.util.List;
 @Service
 @Transactional
 public class AdminServiceImpl implements AdminService {
-    @Resource AdminDao adminDao;
+    @Resource
+    AdminDao adminDao;
+
     @Override
     public Admin checkLogin(String admin_username, String admin_password) {
-        return adminDao.checkLogin(admin_username,admin_password);
+        return adminDao.checkLogin(admin_username, admin_password);
     }
 
     @Override
     public List<Admin> findAdminList(int currentPage, int pageSize, String admin_name) {
-        PageHelper.startPage(currentPage,pageSize);
+        PageHelper.startPage(currentPage, pageSize);
         return adminDao.findAdminList(admin_name);
     }
 

@@ -13,11 +13,6 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @ClassName OrderServiceImp
- * Author 王弈程
- * @Date 2021/9/3 14:07
- **/
 @Service
 @Transactional
 public class OrderServiceImp implements OrderService {
@@ -26,27 +21,21 @@ public class OrderServiceImp implements OrderService {
     private OrderDao orderDao;
 
     @Override
-    public List<Order> adminFindAllOrder(int currentPage, int pageSize, int order_state, String order_no, String customer_name, String driver_name,String tran_name) {
-        PageHelper.startPage(currentPage,pageSize);
-        return orderDao.adminFindAllOrder(order_state,order_no,customer_name,driver_name,tran_name);
+    public List<Order> adminFindAllOrder(int currentPage, int pageSize, int order_state, String order_no, String customer_name, String driver_name, String tran_name) {
+        PageHelper.startPage(currentPage, pageSize);
+        return orderDao.adminFindAllOrder(order_state, order_no, customer_name, driver_name, tran_name);
     }
 
     @Override
     public int customerAddOrder(Order order) {
-        //order.setOrder_no(ODDGenerator.getOrderNo());
         order.setOrder_state(0);
         order.setOrder_create_date(new Date());
-        /* 测试 */
-        /*Customer customer = new Customer();
-        customer.setCustomer_id(2);
-        order.setOrder_customer(customer);*/
-        /*order.setOrder_customer(order.getOrder_customer());*/
         return orderDao.customerAddOrder(order);
     }
 
     @Override
     public List<Order> adminFindOrderFlagIs0(int currentPage, int pageSize) {
-        PageHelper.startPage(currentPage,pageSize);
+        PageHelper.startPage(currentPage, pageSize);
         return orderDao.adminFindOrderFlagIs0();
     }
 
@@ -78,22 +67,14 @@ public class OrderServiceImp implements OrderService {
     @Override
     public int adminUpdateOrder(Order order) {
         int i = orderDao.adminUpdateOrder(order);
-        if (i>0){
-            /* 修改司机、车、订单的状态 */
+        if (i > 0) {
 
-            /*Driver driver = new Driver();
-            driver.setDriver_id(1);
-            int i1 =orderDao.driverFlagChangeIs1(driver.getDriver_id());*/
             int i1 = orderDao.driverFlagChangeIs1(order.getOrder_driver().getDriver_id());
             System.out.println("i1:" + i1);
 
-            /*Tran tran = new Tran();
-            tran.setTran_id(1);
-            int i2 = orderDao.tranFlagChangeIs0(tran.getTran_id());*/
             int i2 = orderDao.tranFlagChangeIs0(order.getOrder_tran().getTran_id());
             System.out.println("i2:" + i2);
 
-            /*order.setOrder_id(8);*/
             int i3 = orderDao.orderFlagChangeIs1(order.getOrder_id());
             System.out.println("i3:" + i3);
         }

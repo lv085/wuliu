@@ -18,7 +18,7 @@ public class TranServiceImpl implements TranService {
     private TranDao tranDao;
 
     public List<Tran> findTranList(int currentPage, int pageSize, String tran_name) {
-        PageHelper.startPage(currentPage,pageSize);
+        PageHelper.startPage(currentPage, pageSize);
         return tranDao.findTranList(tran_name);
     }
 

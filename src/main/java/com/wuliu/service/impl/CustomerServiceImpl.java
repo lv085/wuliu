@@ -24,9 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> findCustomerList(int currentPage, int pageSize, String customer_name) {
-        // 启动分页
         PageHelper.startPage(currentPage, pageSize);
-        // 返回所有查询到的信息
         return customerDao.findCustomerList(customer_name);
     }
 
@@ -48,7 +46,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     public List<Order> findCustomerOwnOrder(int currentPage, int pageSize, Integer customer_id) {
-        // 启动分页
         PageHelper.startPage(currentPage, pageSize);
         return customerDao.findCustomerOwnOrder(customer_id);
     }
