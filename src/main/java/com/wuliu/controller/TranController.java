@@ -16,14 +16,6 @@ public class TranController {
     @Resource
     private TranService tranService;
 
-    /**
-     * 查询所有运输工具
-     *
-     * @param currentPage
-     * @param pageSize
-     * @param tran_name
-     * @return
-     */
     @GetMapping("/findTranList")
     public Result findTranList(
             @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
@@ -34,36 +26,24 @@ public class TranController {
         return Result.success(pageInfo, "查询成功");
     }
 
-    /**
-     * 保存所有运输工具
-     *
-     * @param tran
-     * @return
-     */
     @PostMapping("/saveTran")
     public Result saveTran(@RequestBody Tran tran) {
-        if(tran.getTran_name()==null || tran.getTran_money()==0){
+        if (tran.getTran_name() == null || tran.getTran_money() == 0) {
             return Result.error("添加失败");
-        }else{
-            if(tranService.checkTranName(tran.getTran_name())!=null){
+        } else {
+            if (tranService.checkTranName(tran.getTran_name()) != null) {
                 return Result.error("添加失败");
-            }else{
+            } else {
                 int i = tranService.saveTran(tran);
                 if (i > 0) {
                     return Result.success("添加成功");
-                }else {
+                } else {
                     return Result.error("添加失败");
                 }
             }
         }
     }
 
-    /**
-     * 修改前查询运输工具
-     *
-     * @param tran_id
-     * @return
-     */
     @GetMapping("/findTranById")
     public Result findTranById(@RequestParam(value = "tran_id") int tran_id) {
         Tran tran = tranService.findTranById(tran_id);
@@ -73,12 +53,6 @@ public class TranController {
         return Result.error("查询失败");
     }
 
-    /**
-     * 修改运输工具
-     *
-     * @param tran
-     * @return
-     */
     @PutMapping("/updateTran")
     public Result updateTran(@RequestBody Tran tran) {
         int i = tranService.updateTran(tran);
@@ -88,12 +62,6 @@ public class TranController {
         return Result.error("修改失败");
     }
 
-    /**
-     * 删除运输工具
-     *
-     * @param tran_id
-     * @return
-     */
     @DeleteMapping("/deleteTran")
     public Result deleteTran(@RequestParam(value = "tran_id") int tran_id) {
         int i = tranService.deleteTran(tran_id);

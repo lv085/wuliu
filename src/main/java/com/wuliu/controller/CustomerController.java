@@ -16,13 +16,6 @@ public class CustomerController {
     @Resource
     private CustomerService customerService;
 
-    /**
-     * 用户登录
-     *
-     * @param customer_username 用户账号名
-     * @param customer_password 登录密码
-     * @return 查询到的用户
-     */
     @GetMapping("/checkLogin")
     public Result checkLogin(
             @RequestParam(name = "username", required = true) String customer_username,
@@ -38,14 +31,6 @@ public class CustomerController {
 
     }
 
-    /**
-     * 分页查询所有用户
-     *
-     * @param currentPage   传入当前页数
-     * @param pageSize      传入当前页数数据数
-     * @param customer_name 传入搜索名
-     * @return 分页返回查询用户
-     */
     @GetMapping("/findCustomerList")
     public Result findCustomerList(
             @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
@@ -59,20 +44,14 @@ public class CustomerController {
         return Result.success(pageInfo, "查询成功");
     }
 
-    /**
-     * 管理员增加用户
-     *
-     * @param customer 用户实体
-     * @return 返回执行结果
-     */
     @PostMapping("/saveCustomer")
     public Result saveCustomer(@RequestBody Customer customer) {
-        if (customer.getCustomer_name() == null || customer.getCustomer_tel() ==null || customer.getCustomer_username() == null){
+        if (customer.getCustomer_name() == null || customer.getCustomer_tel() == null || customer.getCustomer_username() == null) {
             return Result.error("客户增加失败");
-        }else{
-            if(customerService.checkCustomer(customer.getCustomer_username())!=null){
+        } else {
+            if (customerService.checkCustomer(customer.getCustomer_username()) != null) {
                 return Result.error("添加失败");
-            }else{
+            } else {
 
                 try {
                     int i = customerService.saveCustomer(customer);
@@ -90,13 +69,6 @@ public class CustomerController {
         }
     }
 
-
-    /**
-     * 先查询要修改用户
-     *
-     * @param customer_id 传入先查询要修改用户的id
-     * @return 返回执行结果
-     */
     @GetMapping("/findCustomerById")
     public Result findCustomerById(@RequestParam("customer_id") Integer customer_id) {
         Customer customer = customerService.findCustomerById(customer_id);
@@ -107,12 +79,6 @@ public class CustomerController {
         }
     }
 
-    /**
-     * 修改用户
-     *
-     * @param customer 传入修改用户后的实体
-     * @return 执行结果
-     */
     @PutMapping("/updateCustomer")
     public Result updateCustomer(@RequestBody Customer customer) {
         try {
@@ -128,14 +94,6 @@ public class CustomerController {
         }
     }
 
-    /**
-     * 查询用户自己的订单
-     *
-     * @param currentPage 传入当前页
-     * @param pageSize    每页的数据
-     * @param customer_id 用户id
-     * @return 订单信息
-     */
     @GetMapping("/findCustomerOwnOrder")
     public Result findCustomerOwnOrder(
             @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
