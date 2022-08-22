@@ -7,11 +7,6 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-/**
- * @ClassName OrderDao
- * Author 王弈程
- * @Date 2021/9/3 14:06
- **/
 public interface OrderDao {
     List<Order> adminFindAllOrder(@Param("order_state") int order_state,
                                   @Param("order_no") String order_no,
