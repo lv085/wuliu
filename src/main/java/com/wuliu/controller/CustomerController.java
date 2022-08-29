@@ -105,4 +105,12 @@ public class CustomerController {
         return Result.success(pageInfo, "查询成功");
     }
 
+    @DeleteMapping("/deleteCustomerById")
+    public Result deleteCustomerById(@RequestParam("customer_id") int customer_id) {
+        int i = customerService.deleteCustomerById(customer_id);
+        if (i > 0) {
+            return Result.success("删除用户成功");
+        }
+        return Result.error("删除用户失败");
+    }
 }

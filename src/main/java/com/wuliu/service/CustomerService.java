@@ -20,4 +20,6 @@ public interface CustomerService {
     List<Order> findCustomerOwnOrder(int currentPage, int pageSize, Integer customer_id);
 
     Customer checkCustomer(String customer_username);
+
+    int deleteCustomerById(int customer_id);
 }

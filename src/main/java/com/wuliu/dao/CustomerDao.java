@@ -21,4 +21,6 @@ public interface CustomerDao {
     List<Order> findCustomerOwnOrder(@Param("customer_id") Integer customer_id);
 
     Customer checkCustomer(String customer_username);
+
+    int deleteCustomerById(int customer_id);
 }

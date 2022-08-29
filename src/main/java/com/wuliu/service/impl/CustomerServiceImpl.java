@@ -55,4 +55,9 @@ public class CustomerServiceImpl implements CustomerService {
         return customerDao.checkCustomer(customer_username);
     }
 
+    @Override
+    public int deleteCustomerById(int customer_id) {
+        return customerDao.deleteCustomerById(customer_id);
+    }
+
 }
