@@ -9,15 +9,9 @@
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc
            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-    
-    <!-- 注解扫描 -->
+
     <context:component-scan base-package="com.wuliu.*"></context:component-scan>
 
-
-    <!--
-        默认注解映射支持 引入第三方依赖需要这个驱动的支持，这里Jackson，如果不引入
-        不能帮助我们默认转化Json
-     -->
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
@@ -31,7 +25,6 @@
     </mvc:annotation-driven>
 
 
-    <!-- 上传控制 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize">
 			<!-- 以字节byte为单位 -->
@@ -41,17 +34,12 @@
 			<value>UTF-8</value>
 		</property>
 	</bean>
-    
-    <!-- 
-        配置sprigmvc视图解析器：解析逻辑试图  后台返回逻辑试图：index 
-        视图解析器解析出真正物理视图：前缀+逻辑试图+后缀====/WEB-INF/index.jsp 
-    -->
+
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/"/>
         <property name="suffix" value=".jsp"/> 
     </bean>
-    
-   <!-- 配置静态资源不拦截 -->
+
    <!--  <mvc:resources location="/static/" mapping="/static/**"></mvc:resources> -->
    <mvc:default-servlet-handler/>
 </beans>

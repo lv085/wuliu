@@ -95,7 +95,7 @@
             <result property="customer_tel" column="customer_tel"/>
             <result property="customer_username" column="customer_username"/>
             <result property="customer_password" column="customer_password"/>
-        </association>
+        </association>  
         <association property="order_driver" column="order_driver" javaType="Driver">
             <id property="driver_id" column="driver_id"/>
             <result property="driver_name" column="driver_name"/>
@@ -121,5 +121,9 @@
         LEFT JOIN t_tran AS t ON o.order_tran = t.tran_id
         WHERE c.customer_id = #{customer_id}
     </select>
+    
+    <delete id="deleteCustomerById">
+        delete from t_customer where customer_id = #{customer_id}
+    </delete>
 
 </mapper>
