@@ -40,12 +40,15 @@
     </resultMap>
 
     <select id="adminFindAllOrder" resultMap="OrderAndCustomerAndDriverAndTran_map">
-        select * from t_order o
+        select *
+        from t_order o
     </select>
 
-<!--  用户撤销订单  -->
+    <!--  用户撤销订单  -->
     <delete id="delOrderById">
-        delete from t_order where order_id=#{order_id}
+        delete
+        from t_order
+        where order_id = #{order_id}
     </delete>
 
     <!-- 用户下单，用户添加不了发货时间，送货时间，司机id和车id，运费 -->
@@ -59,55 +62,56 @@
          order_arrive_username,
          order_arrive_usertel,
          order_customer)
-        values
-        (#{order_no},
-         #{send_address},
-         #{arrive_address},
-         #{order_state},
-         #{order_create_date},
-         #{order_arrive_username},
-         #{order_arrive_usertel},
-         #{order_customer.customer_id})
+        values (#{order_no},
+                #{send_address},
+                #{arrive_address},
+                #{order_state},
+                #{order_create_date},
+                #{order_arrive_username},
+                #{order_arrive_usertel},
+                #{order_customer.customer_id})
     </insert>
 
     <select id="adminFindOrderFlagIs0" resultMap="OrderAndCustomerAndDriverAndTran_map">
         select *
-        from t_order o,t_customer c
-        where 1=1
-        and o.order_customer=c.customer_id
-        and o.order_state=0
+        from t_order o,
+             t_customer c
+        where 1 = 1
+          and o.order_customer = c.customer_id
+          and o.order_state = 0
     </select>
 
     <select id="adminFindOrderContent" resultMap="OrderAndCustomerAndDriverAndTran_map">
         select *
-        from t_order o,t_customer c
-        where 1=1
-        and o.order_customer=c.customer_id
-        and o.order_id=#{order_id }
+        from t_order o,
+             t_customer c
+        where 1 = 1
+          and o.order_customer = c.customer_id
+          and o.order_id = #{order_id }
     </select>
 
     <select id="findDriverFlagIs0" resultType="Driver">
         select *
         from t_driver
-        where driver_state=0
+        where driver_state = 0
     </select>
 
     <select id="findTranFlagIs1" resultType="Tran">
         select *
         from t_tran
-        where tran_state=1
+        where tran_state = 1
     </select>
 
     <update id="driverFlagChangeIs1">
         update t_driver
         set driver_state=1
-        where driver_id=#{driver_id}
+        where driver_id = #{driver_id}
     </update>
 
     <update id="tranFlagChangeIs0">
         update t_tran
         set tran_state=0
-        where tran_id=#{tran_id}
+        where tran_id = #{tran_id}
     </update>
 
     <update id="adminUpdateOrder" parameterType="Order">
@@ -117,13 +121,13 @@
             order_money=#{order_money},
             order_driver=#{order_driver.driver_id},
             order_tran=#{order_tran.tran_id}
-        where order_id=#{order_id}
+        where order_id = #{order_id}
     </update>
 
     <update id="orderFlagChangeIs1">
         update t_order
         set order_state=1
-        where order_id=#{order_id}
+        where order_id = #{order_id}
     </update>
 
     <update id="customerUpdateOrder" parameterType="Order">
@@ -134,7 +138,7 @@
             order_create_date=#{order_create_date},
             order_arrive_username=#{order_arrive_username},
             order_arrive_usertel=#{order_arrive_usertel}
-        where order_id=#{order_id}
+        where order_id = #{order_id}
     </update>
 
 </mapper>

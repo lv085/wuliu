@@ -3,23 +3,23 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wuliu.dao.CustomerDao">
-<!--  判重  -->
+    <!--  判重  -->
     <select id="checkCustomer" resultType="customer">
-        select * from t_customer where customer_username=#{customer_username}
+        select *
+        from t_customer
+        where customer_username = #{customer_username}
     </select>
+
     <!-- 登录-->
     <select id="checkLogin" resultType="customer">
-        SELECT
-        customer_id,
-        customer_name,
-        customer_tel,
-        customer_username,
-        customer_password
-        FROM
-        t_customer
-        WHERE
-        customer_username = #{customer_username}
-        AND customer_password = #{customer_password}
+        SELECT customer_id,
+               customer_name,
+               customer_tel,
+               customer_username,
+               customer_password
+        FROM t_customer
+        WHERE customer_username = #{customer_username}
+          AND customer_password = #{customer_password}
     </select>
 
     <!-- 分页查询 -->
@@ -41,39 +41,33 @@
 
     <!--保存用户-->
     <insert id="saveCustomer" parameterType="customer">
-        INSERT INTO t_customer (
-        customer_name,
-        customer_tel,
-        customer_username,
-        customer_password
-        )
-        VALUE
-        (#{customer_name}, #{customer_tel}, #{customer_username}, #{customer_password})
+        INSERT INTO t_customer (customer_name,
+                                customer_tel,
+                                customer_username,
+                                customer_password)
+            VALUE
+            (#{customer_name}, #{customer_tel}, #{customer_username}, #{customer_password})
     </insert>
 
     <!--修改用户前回显查询到的数据-->
     <select id="findCustomerById" resultType="customer" parameterType="int">
-        SELECT
-        customer_id,
-        customer_name,
-        customer_tel,
-        customer_username,
-        customer_password
-        FROM
-        t_customer
-        WHERE
-        customer_id = #{customer_id}
+        SELECT customer_id,
+               customer_name,
+               customer_tel,
+               customer_username,
+               customer_password
+        FROM t_customer
+        WHERE customer_id = #{customer_id}
     </select>
 
     <!--修改客户数据-->
     <update id="updateCustomer" parameterType="customer">
         UPDATE t_customer
-        SET customer_name = #{customer_name},
-        customer_tel = #{customer_tel},
-        customer_username = #{customer_username},
-        customer_password = #{customer_password}
-        WHERE
-        customer_id = #{customer_id}
+        SET customer_name     = #{customer_name},
+            customer_tel      = #{customer_tel},
+            customer_username = #{customer_username},
+            customer_password = #{customer_password}
+        WHERE customer_id = #{customer_id}
     </update>
 
     <!--用户自己订单查询map-->
@@ -95,7 +89,7 @@
             <result property="customer_tel" column="customer_tel"/>
             <result property="customer_username" column="customer_username"/>
             <result property="customer_password" column="customer_password"/>
-        </association>  
+        </association>
         <association property="order_driver" column="order_driver" javaType="Driver">
             <id property="driver_id" column="driver_id"/>
             <result property="driver_name" column="driver_name"/>
@@ -110,20 +104,21 @@
             <result property="tran_state" column="tran_state"/>
         </association>
     </resultMap>
+
     <!--客户查询自己的所有订单信息-->
     <select id="findCustomerOwnOrder" resultMap="findCustomerOwnOrderMap" parameterType="int">
-        SELECT
-        *
-        FROM
-        t_order AS o
-        LEFT JOIN t_customer AS c ON o.order_customer = c.customer_id
-        LEFT JOIN t_driver AS d ON o.order_driver = d.driver_id
-        LEFT JOIN t_tran AS t ON o.order_tran = t.tran_id
+        SELECT *
+        FROM t_order AS o
+                 LEFT JOIN t_customer AS c ON o.order_customer = c.customer_id
+                 LEFT JOIN t_driver AS d ON o.order_driver = d.driver_id
+                 LEFT JOIN t_tran AS t ON o.order_tran = t.tran_id
         WHERE c.customer_id = #{customer_id}
     </select>
-    
+
     <delete id="deleteCustomerById">
-        delete from t_customer where customer_id = #{customer_id}
+        delete
+        from t_customer
+        where customer_id = #{customer_id}
     </delete>
 
 </mapper>

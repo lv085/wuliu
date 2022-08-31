@@ -1,10 +1,10 @@
 package com.wuliu.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.wuliu.dao.CustomerDao;
 import com.wuliu.entity.Customer;
 import com.wuliu.entity.Order;
 import com.wuliu.service.CustomerService;
-import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

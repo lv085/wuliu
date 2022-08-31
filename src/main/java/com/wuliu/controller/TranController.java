@@ -1,9 +1,9 @@
 package com.wuliu.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.wuliu.entity.Tran;
 import com.wuliu.service.TranService;
 import com.wuliu.utils.Result;
-import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

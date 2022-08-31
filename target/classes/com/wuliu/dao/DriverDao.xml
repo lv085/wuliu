@@ -5,9 +5,13 @@
 <mapper namespace="com.wuliu.dao.DriverDao">
     <!-- 登录-->
     <select id="checkLogin" resultType="driver">
-        select * from t_driver where driver_username = #{username} and driver_password = #{password}
+        select *
+        from t_driver
+        where driver_username = #{username}
+          and driver_password = #{password}
     </select>
-<!-- 查询司机 -->
+
+    <!-- 查询司机 -->
     <select id="findDriverList" resultType="driver">
         select * from t_driver where 1=1
         <if test="driver_name!=''">
@@ -15,35 +19,44 @@
         </if>
     </select>
 
-<!--  停职司机  -->
+    <!--  停职司机  -->
     <update id="updateDriverStateById">
-        update t_driver set driver_state=2 where driver_id=#{driver_id}
+        update t_driver
+        set driver_state=2
+        where driver_id = #{driver_id}
     </update>
 
     <insert id="saveDriver">
         insert into t_driver
-        (driver_name,driver_username,driver_password,driver_state)
-        value
-        (#{driver_name},#{driver_username},#{driver_password},#{driver_state})
+            (driver_name, driver_username, driver_password, driver_state)
+            value
+            (#{driver_name}, #{driver_username}, #{driver_password}, #{driver_state})
     </insert>
 
     <select id="findDriverByName" parameterType="String" resultType="driver">
-        select * from t_driver where driver_username=#{driver_username}
+        select *
+        from t_driver
+        where driver_username = #{driver_username}
     </select>
 
     <select id="findDriverById" parameterType="int" resultType="driver">
-        select * from t_driver where driver_id=#{driver_id}
+        select *
+        from t_driver
+        where driver_id = #{driver_id}
     </select>
 
     <update id="updateDriver" parameterType="driver">
         update t_driver
-        set
-        driver_name=#{driver_name},driver_username=#{driver_username},driver_password=#{driver_password}
-        where driver_id =#{driver_id}
+        set driver_name=#{driver_name},
+            driver_username=#{driver_username},
+            driver_password=#{driver_password}
+        where driver_id = #{driver_id}
     </update>
 
     <delete id="deleteDriver" parameterType="int">
-        delete from t_driver where driver_id=#{driver_id}
+        delete
+        from t_driver
+        where driver_id = #{driver_id}
     </delete>
 
     <resultMap id="orderDriverMap" type="order">
@@ -73,6 +86,7 @@
             <id column="order_driver" property="driver_id"/>
         </association>
     </resultMap>
+
     <!--  根据司机id查找运单  -->
     <select id="findOrderByDid" resultMap="orderDriverMap">
         select * from t_order o,t_customer c,t_tran t where o.order_customer=c.customer_id and o.order_tran=t.tran_id
@@ -85,23 +99,34 @@
 
     <!--  修改司机状态为空闲0  -->
     <update id="changeDriverState0">
-        update t_driver set driver_state=0 where driver_id=#{driver_id}
+        update t_driver
+        set driver_state=0
+        where driver_id = #{driver_id}
     </update>
 
     <!--  根据运单id修改运单状态  -->
     <update id="changeOrderState">
-        update t_order set order_state=#{order_state} where order_id=#{order_id}
+        update t_order
+        set order_state=#{order_state}
+        where order_id = #{order_id}
     </update>
 
     <!--  将运输工具状态改为1  -->
     <update id="changeTranState1">
-        update t_tran set tran_state=1 where tran_id=#{tran_id}
+        update t_tran
+        set tran_state=1
+        where tran_id = #{tran_id}
     </update>
 
     <!--  查询正在进行的运单  -->
     <select id="findOneOrder" resultMap="orderDriverMap">
-        select * from t_order o,t_customer c,t_tran t
-        where o.order_customer=c.customer_id and o.order_tran=t.tran_id
-        and o.order_state !=3 and o.order_driver=#{driver_id}
+        select *
+        from t_order o,
+             t_customer c,
+             t_tran t
+        where o.order_customer = c.customer_id
+          and o.order_tran = t.tran_id
+          and o.order_state != 3
+          and o.order_driver = #{driver_id}
     </select>
 </mapper>

@@ -1,12 +1,12 @@
 package com.wuliu.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.wuliu.entity.Driver;
 import com.wuliu.entity.Order;
 import com.wuliu.entity.Tran;
 import com.wuliu.service.OrderService;
 import com.wuliu.utils.ODDGenerator;
 import com.wuliu.utils.Result;
-import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
